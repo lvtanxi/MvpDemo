@@ -1,11 +1,6 @@
 package com.lv.test;
 
 import android.app.Application;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.support.v4.content.LocalBroadcastManager;
 
 import com.lv.test.ui.IView.IBaseView;
 
@@ -21,7 +16,6 @@ import io.paperdb.Paper;
  */
 public class App extends Application{
     private static App mApp;
-    private BroadcastReceiver mBroadcastReceiver;
     private IBaseView mBaseView;
 
     public void setBaseView(IBaseView baseView) {
@@ -38,15 +32,5 @@ public class App extends Application{
         mApp=this;
         Paper.init(this);
         x.Ext.init(this);
-        registerLocalBroadcastReceivers();
-    }
-    private void registerLocalBroadcastReceivers() {
-        mBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                mBaseView.notifyDialog("sadfasd");
-            }
-        };
-      LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, new IntentFilter("test"));
     }
 }

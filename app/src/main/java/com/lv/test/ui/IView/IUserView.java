@@ -9,4 +9,5 @@ package com.lv.test.ui.IView;
 public interface IUserView extends IBaseView{
     String getUserName();
     String getPwd();
+    void finish();
 }

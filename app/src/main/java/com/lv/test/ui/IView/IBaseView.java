@@ -1,7 +1,5 @@
 package com.lv.test.ui.IView;
 
-import android.support.annotation.NonNull;
-
 /**
  * User: 吕勇
  * Date: 2016-03-17
@@ -14,11 +12,6 @@ public interface IBaseView {
 
     void hideLoadingView();
 
-    void showToast(@NonNull String message);
-
-    void notifyDialog(@NonNull String message);
-
-
-    void startActivity();
+    void toastError(String message);
 
 }

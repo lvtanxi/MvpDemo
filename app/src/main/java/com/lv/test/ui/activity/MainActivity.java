@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.lv.test.App;
 import com.lv.test.R;
-import com.lv.test.presenter.UserPresenter;
 import com.lv.test.ui.IView.IUserView;
 
 import org.xutils.common.Callback;
@@ -34,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements IUserView {
     @Bind(R.id.pwd)
     AppCompatEditText pwd;
     private ProgressDialog progressDialog;
-    UserPresenter userPresenter;
+
 
 
     @Override
@@ -43,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements IUserView {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         progressDialog=new ProgressDialog(this);
-        userPresenter=new UserPresenter(this);
         App.getApp().setBaseView(this);
         RequestParams params = new RequestParams("http://gdown.baidu.com/data/wisegame/6e2cd3e0f2055711/QQ_350.apk");
         params.setSaveFilePath(Environment.getExternalStorageDirectory().getAbsolutePath()+"/duminj.apk");
@@ -105,11 +103,14 @@ public class MainActivity extends AppCompatActivity implements IUserView {
     }
 
     @Override
+    public void toastError(String message) {
+
+    }
+
     public void showToast(@NonNull String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    @Override
     public void notifyDialog(@NonNull String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Material Design Dialog");
@@ -119,12 +120,8 @@ public class MainActivity extends AppCompatActivity implements IUserView {
         builder.show();
     }
 
-    @Override
-    public void startActivity() {
-}
 
     @OnClick(R.id.login)
     public void onClick() {
-        userPresenter.validateUser();
     }
 }

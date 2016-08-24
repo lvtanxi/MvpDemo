@@ -1,11 +1,12 @@
 package com.lv.test.presenter;
 
-import android.text.TextUtils;
+import android.util.Log;
 
-import com.lv.test.model.User;
 import com.lv.test.ui.IView.IUserView;
 
-import io.paperdb.Paper;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 /**
  * User: 吕勇
@@ -13,27 +14,40 @@ import io.paperdb.Paper;
  * Time: 10:20
  * Description:
  */
-public class UserPresenter {
-    private IUserView iUserView;
+public class UserPresenter extends BasePresenter<IUserView> {
 
-    public UserPresenter(IUserView iUserView) {
-        this.iUserView = iUserView;
+    public void validateUser() {
+        if (isViewAttached())
+            getView().showLoadingView();
+        getView().getPwd();
+        getView().getUserName();
+        RequestParams requestParams = new RequestParams("http://101.204.247.72:10003/wmapp-server/app/getNewest");
+        requestParams.addBodyParameter("app_type", "1");
+        requestParams.setAsJsonContent(true);
+        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.d("UserPresenter", result);
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                if (isViewAttached())
+                    getView().toastError(ex.getMessage());
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+                if (isViewAttached())
+                    getView().hideLoadingView();
+            }
+
+            @Override
+            public void onFinished() {
+                if (isViewAttached())
+                    getView().hideLoadingView();
+            }
+        });
     }
-    public void validateUser(){
-        String userName = iUserView.getUserName();
-        if(TextUtils.isEmpty(userName)){
-            iUserView.notifyDialog("我是你爸爸");
-            return;
-        }
-        String pwd = iUserView.getPwd();
-        if(TextUtils.isEmpty(pwd)){
-            iUserView.showToast("她是你妈妈");
-            return;
-        }
-        User user=new User();
-        user.setName(userName);
-        user.setPwd(pwd);
-        Paper.book().write("user", user);
-        iUserView.startActivity();
-    }
+
 }
